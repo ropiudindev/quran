@@ -99,10 +99,6 @@ class CardWidget extends StatelessWidget {
   }
 }
 
-String getStatus(DateTime date) {
-  return date.isBefore(DateTime.now()) ? 'Done' : 'Incoming';
-}
-
 Widget textRow(String textOne, String textTwo) {
   return Wrap(
     children: [
