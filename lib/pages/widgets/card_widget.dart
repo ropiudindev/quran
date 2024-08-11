@@ -53,21 +53,6 @@ class CardWidget extends StatelessWidget {
                     const SizedBox(
                       height: 10.0,
                     ),
-                    // InkWell(
-                    //   onTap: onTap,
-                    //   child: Container(
-                    //     width: 37,
-                    //     height: 37,
-                    //     decoration: const BoxDecoration(
-                    //       shape: BoxShape.circle,
-                    //       color: Color.fromRGBO(221, 40, 81, 0.18),
-                    //     ),
-                    //     child: const Icon(
-                    //       Icons.play_circle,
-                    //       color: Colors.red,
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
                 const SizedBox(
