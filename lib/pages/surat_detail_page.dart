@@ -32,27 +32,14 @@ class SuratDetailPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 children: [
                   HeaderSurat(detailSurat: detailSurat),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   Text('Ayat:', style: Theme.of(context).textTheme.titleLarge),
-                  ...detailSurat.ayat.map((ayat) => Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text('Ayat ${ayat.nomorAyat}'),
-                              Text(ayat.teksArab),
-                              Text(ayat.teksIndonesia),
-                              const SizedBox(
-                                height: 5,
-                              )
-                            ],
-                          )
-
-                      //  ListTile(
-                      //       title: Text('Ayat ${ayat.nomorAyat}'),
-                      //       subtitle: Text(ayat.teksIndonesia),
-                      //     ),
-
-                      ),
+                  const SizedBox(height: 10),
+                  ...detailSurat.ayat.map(
+                    (ayat) => AyatWidget(
+                      ayat: ayat,
+                    ),
+                  ),
                 ],
               );
             } else if (state is SuratError) {
@@ -63,6 +50,67 @@ class SuratDetailPage extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class AyatWidget extends StatelessWidget {
+  final Ayat ayat;
+  const AyatWidget({
+    super.key,
+    required this.ayat,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            border: Border.all(
+              color: const Color.fromRGBO(220, 233, 245, 1),
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                'Ayat ${ayat.nomorAyat}',
+                textAlign: TextAlign.end,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                ayat.teksArab,
+                textAlign: TextAlign.end,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: Colors.purple,
+                    ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                ayat.teksIndonesia,
+                textAlign: TextAlign.start,
+              ),
+              const SizedBox(
+                height: 5,
+              )
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10.0,
+        )
+      ],
     );
   }
 }
