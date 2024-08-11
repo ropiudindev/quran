@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -115,7 +116,7 @@ class AyatWidget extends StatelessWidget {
   }
 }
 
-class HeaderSurat extends StatelessWidget {
+class HeaderSurat extends StatefulWidget {
   const HeaderSurat({
     super.key,
     required this.detailSurat,
@@ -124,17 +125,44 @@ class HeaderSurat extends StatelessWidget {
   final DetailSurat detailSurat;
 
   @override
+  State<HeaderSurat> createState() => _HeaderSuratState();
+}
+
+class _HeaderSuratState extends State<HeaderSurat> {
+  final player = AudioPlayer();
+  bool isPlaying = false;
+
+  @override
+  void dispose() {
+    player.dispose();
+    isPlaying = false;
+    super.dispose();
+  }
+
+  void _playPause(String currentFile) async {
+    if (isPlaying) {
+      await player.pause();
+    } else {
+      await player.play(UrlSource(currentFile));
+    }
+
+    setState(() {
+      isPlaying = !isPlaying;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
-          detailSurat.nama,
+          widget.detailSurat.nama,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: Colors.purple,
               ),
         ),
         Text(
-          detailSurat.namaLatin,
+          widget.detailSurat.namaLatin,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: Colors.purple,
               ),
@@ -142,12 +170,34 @@ class HeaderSurat extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        Text(detailSurat.arti),
-        Text('Jumlah ayat : ${detailSurat.jumlahAyat.toString()}'),
+        GestureDetector(
+          onTap: () async {
+            _playPause(widget.detailSurat.audioFull.audio01 ?? '');
+          },
+          child: Container(
+            width: 37,
+            height: 37,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color.fromRGBO(221, 40, 81, 0.18),
+            ),
+            child: Center(
+              child: Icon(
+                !isPlaying ? Icons.play_arrow : Icons.pause_circle,
+                color: Colors.purple,
+              ),
+            ),
+          ),
+        ),
         const SizedBox(
           height: 10,
         ),
-        HtmlWidget(detailSurat.deskripsi),
+        Text(widget.detailSurat.arti),
+        Text('Jumlah ayat : ${widget.detailSurat.jumlahAyat.toString()}'),
+        const SizedBox(
+          height: 10,
+        ),
+        HtmlWidget(widget.detailSurat.deskripsi),
       ],
     );
   }

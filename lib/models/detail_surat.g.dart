@@ -34,19 +34,11 @@ Map<String, dynamic> _$DetailSuratToJson(DetailSurat instance) =>
     };
 
 AudioFull _$AudioFullFromJson(Map<String, dynamic> json) => AudioFull(
-      audio01: json['audio01'] as String?,
-      audio02: json['audio02'] as String?,
-      audio03: json['audio03'] as String?,
-      audio04: json['audio04'] as String?,
-      audio05: json['audio05'] as String?,
+      audio01: json['01'] as String?,
     );
 
 Map<String, dynamic> _$AudioFullToJson(AudioFull instance) => <String, dynamic>{
-      'audio01': instance.audio01,
-      'audio02': instance.audio02,
-      'audio03': instance.audio03,
-      'audio04': instance.audio04,
-      'audio05': instance.audio05,
+      '01': instance.audio01,
     };
 
 Ayat _$AyatFromJson(Map<String, dynamic> json) => Ayat(
@@ -66,17 +58,9 @@ Map<String, dynamic> _$AyatToJson(Ayat instance) => <String, dynamic>{
     };
 
 Audio _$AudioFromJson(Map<String, dynamic> json) => Audio(
-      audio01: json['audio01'] as String?,
-      audio02: json['audio02'] as String?,
-      audio03: json['audio03'] as String?,
-      audio04: json['audio04'] as String?,
-      audio05: json['audio05'] as String?,
+      audio01: json['01'] as String?,
     );
 
 Map<String, dynamic> _$AudioToJson(Audio instance) => <String, dynamic>{
-      'audio01': instance.audio01,
-      'audio02': instance.audio02,
-      'audio03': instance.audio03,
-      'audio04': instance.audio04,
-      'audio05': instance.audio05,
+      '01': instance.audio01,
     };

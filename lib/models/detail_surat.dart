@@ -34,18 +34,11 @@ class DetailSurat {
 
 @JsonSerializable()
 class AudioFull {
+  @JsonKey(name: '01')
   final String? audio01;
-  final String? audio02;
-  final String? audio03;
-  final String? audio04;
-  final String? audio05;
 
   AudioFull({
     this.audio01,
-    this.audio02,
-    this.audio03,
-    this.audio04,
-    this.audio05,
   });
 
   factory AudioFull.fromJson(Map<String, dynamic> json) =>
@@ -77,18 +70,11 @@ class Ayat {
 
 @JsonSerializable()
 class Audio {
+  @JsonKey(name: '01')
   final String? audio01;
-  final String? audio02;
-  final String? audio03;
-  final String? audio04;
-  final String? audio05;
 
   Audio({
     this.audio01,
-    this.audio02,
-    this.audio03,
-    this.audio04,
-    this.audio05,
   });
 
   factory Audio.fromJson(Map<String, dynamic> json) => _$AudioFromJson(json);
