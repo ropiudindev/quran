@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import '../bloc/surat_bloc.dart';
 import '../bloc/surat_event.dart';
 import '../bloc/surat_state.dart';
@@ -34,7 +35,8 @@ class SuratDetailPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Text(detailSurat.arti),
-                  Text(detailSurat.deskripsi, textAlign: TextAlign.justify),
+                  HtmlWidget(detailSurat.deskripsi),
+                  // Text(detailSurat.deskripsi, textAlign: TextAlign.justify),
                   const SizedBox(height: 20),
                   Text('Ayat:', style: Theme.of(context).textTheme.titleLarge),
                   ...detailSurat.ayat.map((ayat) => ListTile(
