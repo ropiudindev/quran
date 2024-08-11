@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:quran/models/surat.dart';
 
 class CardWidget extends StatelessWidget {
@@ -93,15 +94,11 @@ class CardWidget extends StatelessWidget {
                       const SizedBox(
                         height: 5.0,
                       ),
-                      Text(
-                        surat.deskripsi,
-                        style: const TextStyle(
-                          color: Color.fromRGBO(19, 22, 33, 1),
-                          fontSize: 14.0,
+                      Expanded(
+                        child: HtmlWidget(
+                          '''${surat.deskripsi.substring(0, 130)}...''',
                         ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      )
+                      ),
                     ],
                   ),
                 ),
