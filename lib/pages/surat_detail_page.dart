@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:quran/models/detail_surat.dart';
 import '../bloc/surat_bloc.dart';
 import '../bloc/surat_event.dart';
 import '../bloc/surat_state.dart';
@@ -30,19 +31,28 @@ class SuratDetailPage extends StatelessWidget {
               return ListView(
                 padding: const EdgeInsets.all(8),
                 children: [
-                  Text(
-                    detailSurat.namaLatin,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  Text(detailSurat.arti),
-                  HtmlWidget(detailSurat.deskripsi),
-                  // Text(detailSurat.deskripsi, textAlign: TextAlign.justify),
+                  HeaderSurat(detailSurat: detailSurat),
                   const SizedBox(height: 20),
                   Text('Ayat:', style: Theme.of(context).textTheme.titleLarge),
-                  ...detailSurat.ayat.map((ayat) => ListTile(
-                        title: Text('Ayat ${ayat.nomorAyat}'),
-                        subtitle: Text(ayat.teksIndonesia),
-                      )),
+                  ...detailSurat.ayat.map((ayat) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text('Ayat ${ayat.nomorAyat}'),
+                              Text(ayat.teksArab),
+                              Text(ayat.teksIndonesia),
+                              const SizedBox(
+                                height: 5,
+                              )
+                            ],
+                          )
+
+                      //  ListTile(
+                      //       title: Text('Ayat ${ayat.nomorAyat}'),
+                      //       subtitle: Text(ayat.teksIndonesia),
+                      //     ),
+
+                      ),
                 ],
               );
             } else if (state is SuratError) {
@@ -53,6 +63,44 @@ class SuratDetailPage extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class HeaderSurat extends StatelessWidget {
+  const HeaderSurat({
+    super.key,
+    required this.detailSurat,
+  });
+
+  final DetailSurat detailSurat;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          detailSurat.nama,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Colors.purple,
+              ),
+        ),
+        Text(
+          detailSurat.namaLatin,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Colors.purple,
+              ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(detailSurat.arti),
+        Text('Jumlah ayat : ${detailSurat.jumlahAyat.toString()}'),
+        const SizedBox(
+          height: 10,
+        ),
+        HtmlWidget(detailSurat.deskripsi),
+      ],
     );
   }
 }
