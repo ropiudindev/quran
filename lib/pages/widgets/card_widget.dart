@@ -40,29 +40,33 @@ class CardWidget extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: Color.fromRGBO(221, 40, 81, 0.18),
                       ),
-                      child: const Icon(
-                        Icons.menu_book,
-                        color: Colors.purple,
+                      child: Center(
+                        child: Text(
+                          surat.nomor.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.purple),
+                        ),
                       ),
                     ),
                     const SizedBox(
                       height: 10.0,
                     ),
-                    InkWell(
-                      onTap: onTap,
-                      child: Container(
-                        width: 37,
-                        height: 37,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color.fromRGBO(221, 40, 81, 0.18),
-                        ),
-                        child: const Icon(
-                          Icons.play_circle,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
+                    // InkWell(
+                    //   onTap: onTap,
+                    //   child: Container(
+                    //     width: 37,
+                    //     height: 37,
+                    //     decoration: const BoxDecoration(
+                    //       shape: BoxShape.circle,
+                    //       color: Color.fromRGBO(221, 40, 81, 0.18),
+                    //     ),
+                    //     child: const Icon(
+                    //       Icons.play_circle,
+                    //       color: Colors.red,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 const SizedBox(
@@ -84,7 +88,7 @@ class CardWidget extends StatelessWidget {
                       const SizedBox(
                         height: 5.0,
                       ),
-                      textRow('nomor ', surat.nomor.toString()),
+                      textRow('Nama latin ', surat.namaLatin),
                       textRow('Jumlah ayat ', surat.jumlahAyat.toString()),
                       const SizedBox(
                         height: 5.0,
