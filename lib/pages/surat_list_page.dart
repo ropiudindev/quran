@@ -19,7 +19,12 @@ class _SuratListPageState extends State<SuratListPage> {
     return BlocProvider(
       create: (context) => SuratBloc(ApiService())..add(FetchSuratList()),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Daftar Surat')),
+        appBar: AppBar(
+          title: const Text(
+            'Daftar Surat',
+          ),
+          backgroundColor: Colors.purple,
+        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlocBuilder<SuratBloc, SuratState>(

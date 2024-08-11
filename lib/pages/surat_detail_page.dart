@@ -16,7 +16,10 @@ class SuratDetailPage extends StatelessWidget {
       create: (context) =>
           SuratBloc(ApiService())..add(FetchSuratDetail(nomor)),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Detail Surat')),
+        appBar: AppBar(
+          title: const Text('Detail Surat'),
+          backgroundColor: Colors.purple,
+        ),
         body: BlocBuilder<SuratBloc, SuratState>(
           builder: (context, state) {
             if (state is SuratLoading) {
