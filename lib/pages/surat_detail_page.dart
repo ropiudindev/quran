@@ -129,21 +129,31 @@ class HeaderSurat extends StatefulWidget {
 }
 
 class _HeaderSuratState extends State<HeaderSurat> {
-  final player = AudioPlayer();
+  final audioPlayer = AudioPlayer();
   bool isPlaying = false;
 
   @override
+  void initState() {
+    super.initState();
+    audioPlayer.onPlayerComplete.listen((_) {
+      setState(() {
+        isPlaying = false;
+      });
+    });
+  }
+
+  @override
   void dispose() {
-    player.dispose();
+    audioPlayer.dispose();
     isPlaying = false;
     super.dispose();
   }
 
   void _playPause(String currentFile) async {
     if (isPlaying) {
-      await player.pause();
+      await audioPlayer.pause();
     } else {
-      await player.play(UrlSource(currentFile));
+      await audioPlayer.play(UrlSource(currentFile));
     }
 
     setState(() {
