@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran/pages/login_page.dart';
 import 'pages/surat_list_page.dart';
 import 'pages/surat_detail_page.dart';
 
@@ -15,11 +16,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'quran',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const SuratListPage(),
+        '/': (context) => const LoginPage(),
+        '/list-surat': (context) => const SuratListPage(),
         '/detail': (context) {
           final int nomor = ModalRoute.of(context)!.settings.arguments as int;
           return SuratDetailPage(nomor: nomor);

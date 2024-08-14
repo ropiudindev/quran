@@ -8,16 +8,53 @@ import '../bloc/surat_event.dart';
 import '../bloc/surat_state.dart';
 import '../services/api_service.dart';
 
-class SuratDetailPage extends StatelessWidget {
+class SuratDetailPage extends StatefulWidget {
   final int nomor;
 
   const SuratDetailPage({super.key, required this.nomor});
 
   @override
+  State<SuratDetailPage> createState() => _SuratDetailPageState();
+}
+
+class _SuratDetailPageState extends State<SuratDetailPage> {
+  final audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer.onPlayerComplete.listen((_) {
+      setState(() {
+        isPlaying = false;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    isPlaying = false;
+    super.dispose();
+  }
+
+  void _playPause(String currentFile) async {
+    if (isPlaying) {
+      await audioPlayer.pause();
+    } else {
+      await audioPlayer.play(UrlSource(currentFile));
+    }
+
+    setState(() {
+      isPlaying = !isPlaying;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          SuratBloc(ApiService())..add(FetchSuratDetail(nomor)),
+          SuratBloc(ApiService())..add(FetchSuratDetail(widget.nomor)),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Detail Surat'),
@@ -32,7 +69,15 @@ class SuratDetailPage extends StatelessWidget {
               return ListView(
                 padding: const EdgeInsets.all(8),
                 children: [
-                  HeaderSurat(detailSurat: detailSurat),
+                  HeaderSurat(
+                    detailSurat: detailSurat,
+                    isPlaying: isPlaying,
+                    onTap: () async {
+                      _playPause(
+                        detailSurat.audioFull.audio01 ?? '',
+                      );
+                    },
+                  ),
                   const SizedBox(height: 10),
                   Text('Ayat:', style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 10),
@@ -120,47 +165,19 @@ class HeaderSurat extends StatefulWidget {
   const HeaderSurat({
     super.key,
     required this.detailSurat,
+    required this.onTap,
+    required this.isPlaying,
   });
 
   final DetailSurat detailSurat;
+  final Function() onTap;
+  final bool isPlaying;
 
   @override
   State<HeaderSurat> createState() => _HeaderSuratState();
 }
 
 class _HeaderSuratState extends State<HeaderSurat> {
-  final audioPlayer = AudioPlayer();
-  bool isPlaying = false;
-
-  @override
-  void initState() {
-    super.initState();
-    audioPlayer.onPlayerComplete.listen((_) {
-      setState(() {
-        isPlaying = false;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    audioPlayer.dispose();
-    isPlaying = false;
-    super.dispose();
-  }
-
-  void _playPause(String currentFile) async {
-    if (isPlaying) {
-      await audioPlayer.pause();
-    } else {
-      await audioPlayer.play(UrlSource(currentFile));
-    }
-
-    setState(() {
-      isPlaying = !isPlaying;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -181,9 +198,7 @@ class _HeaderSuratState extends State<HeaderSurat> {
           height: 10,
         ),
         GestureDetector(
-          onTap: () async {
-            _playPause(widget.detailSurat.audioFull.audio01 ?? '');
-          },
+          onTap: widget.onTap,
           child: Container(
             width: 37,
             height: 37,
@@ -193,7 +208,7 @@ class _HeaderSuratState extends State<HeaderSurat> {
             ),
             child: Center(
               child: Icon(
-                !isPlaying ? Icons.play_arrow : Icons.pause_circle,
+                !widget.isPlaying ? Icons.play_arrow : Icons.pause_circle,
                 color: Colors.purple,
               ),
             ),

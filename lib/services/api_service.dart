@@ -4,8 +4,7 @@ import '../models/surat.dart';
 import '../models/detail_surat.dart';
 
 class ApiService {
-  final String baseUrl =
-      'https://equran.id/api/v2'; // Ganti dengan URL API Anda
+  final String baseUrl = 'https://equran.id/api/v2';
 
   Future<List<Surat>> fetchSuratList() async {
     final response = await http.get(Uri.parse('$baseUrl/surat'));
