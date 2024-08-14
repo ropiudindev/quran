@@ -69,55 +69,14 @@ class _SuratDetailPageState extends State<SuratDetailPage> {
               return ListView(
                 padding: const EdgeInsets.all(8),
                 children: [
-                  Column(
-                    children: [
-                      Text(
-                        detailSurat.nama,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Colors.purple,
-                            ),
-                      ),
-                      Text(
-                        detailSurat.namaLatin,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Colors.purple,
-                            ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          _playPause(detailSurat.audioFull.audio01 ?? '');
-                        },
-                        child: Container(
-                          width: 37,
-                          height: 37,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color.fromRGBO(221, 40, 81, 0.18),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              !isPlaying
-                                  ? Icons.play_arrow
-                                  : Icons.pause_circle,
-                              color: Colors.purple,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(detailSurat.arti),
-                      Text(
-                          'Jumlah ayat : ${detailSurat.jumlahAyat.toString()}'),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      HtmlWidget(detailSurat.deskripsi),
-                    ],
+                  HeaderSurat(
+                    detailSurat: detailSurat,
+                    isPlaying: isPlaying,
+                    onTap: () async {
+                      _playPause(
+                        detailSurat.audioFull.audio01 ?? '',
+                      );
+                    },
                   ),
                   const SizedBox(height: 10),
                   Text('Ayat:', style: Theme.of(context).textTheme.titleLarge),
@@ -197,6 +156,73 @@ class AyatWidget extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         )
+      ],
+    );
+  }
+}
+
+class HeaderSurat extends StatefulWidget {
+  const HeaderSurat({
+    super.key,
+    required this.detailSurat,
+    required this.onTap,
+    required this.isPlaying,
+  });
+
+  final DetailSurat detailSurat;
+  final Function() onTap;
+  final bool isPlaying;
+
+  @override
+  State<HeaderSurat> createState() => _HeaderSuratState();
+}
+
+class _HeaderSuratState extends State<HeaderSurat> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          widget.detailSurat.nama,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Colors.purple,
+              ),
+        ),
+        Text(
+          widget.detailSurat.namaLatin,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Colors.purple,
+              ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        GestureDetector(
+          onTap: widget.onTap,
+          child: Container(
+            width: 37,
+            height: 37,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color.fromRGBO(221, 40, 81, 0.18),
+            ),
+            child: Center(
+              child: Icon(
+                !widget.isPlaying ? Icons.play_arrow : Icons.pause_circle,
+                color: Colors.purple,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(widget.detailSurat.arti),
+        Text('Jumlah ayat : ${widget.detailSurat.jumlahAyat.toString()}'),
+        const SizedBox(
+          height: 10,
+        ),
+        HtmlWidget(widget.detailSurat.deskripsi),
       ],
     );
   }
