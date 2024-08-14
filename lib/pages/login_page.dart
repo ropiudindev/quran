@@ -17,13 +17,25 @@ class LoginPage extends StatelessWidget {
           onPressed: () async {
             bool authenticated = await FingerprintChannel.authenticate();
             if (authenticated) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Berhasil masuk',
+                  ),
+                ),
+              );
               Navigator.popAndPushNamed(
                 context,
                 '/list-surat',
               );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Authentication failed')));
+                const SnackBar(
+                  content: Text(
+                    'Gagal masuk',
+                  ),
+                ),
+              );
             }
           },
           child: const Text('Login dengan Fingerprint'),
