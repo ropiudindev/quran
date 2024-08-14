@@ -8,16 +8,53 @@ import '../bloc/surat_event.dart';
 import '../bloc/surat_state.dart';
 import '../services/api_service.dart';
 
-class SuratDetailPage extends StatelessWidget {
+class SuratDetailPage extends StatefulWidget {
   final int nomor;
 
   const SuratDetailPage({super.key, required this.nomor});
 
   @override
+  State<SuratDetailPage> createState() => _SuratDetailPageState();
+}
+
+class _SuratDetailPageState extends State<SuratDetailPage> {
+  final audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer.onPlayerComplete.listen((_) {
+      setState(() {
+        isPlaying = false;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    isPlaying = false;
+    super.dispose();
+  }
+
+  void _playPause(String currentFile) async {
+    if (isPlaying) {
+      await audioPlayer.pause();
+    } else {
+      await audioPlayer.play(UrlSource(currentFile));
+    }
+
+    setState(() {
+      isPlaying = !isPlaying;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          SuratBloc(ApiService())..add(FetchSuratDetail(nomor)),
+          SuratBloc(ApiService())..add(FetchSuratDetail(widget.nomor)),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Detail Surat'),
@@ -32,7 +69,56 @@ class SuratDetailPage extends StatelessWidget {
               return ListView(
                 padding: const EdgeInsets.all(8),
                 children: [
-                  HeaderSurat(detailSurat: detailSurat),
+                  Column(
+                    children: [
+                      Text(
+                        detailSurat.nama,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Colors.purple,
+                            ),
+                      ),
+                      Text(
+                        detailSurat.namaLatin,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Colors.purple,
+                            ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          _playPause(detailSurat.audioFull.audio01 ?? '');
+                        },
+                        child: Container(
+                          width: 37,
+                          height: 37,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color.fromRGBO(221, 40, 81, 0.18),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              !isPlaying
+                                  ? Icons.play_arrow
+                                  : Icons.pause_circle,
+                              color: Colors.purple,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(detailSurat.arti),
+                      Text(
+                          'Jumlah ayat : ${detailSurat.jumlahAyat.toString()}'),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      HtmlWidget(detailSurat.deskripsi),
+                    ],
+                  ),
                   const SizedBox(height: 10),
                   Text('Ayat:', style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 10),
@@ -111,103 +197,6 @@ class AyatWidget extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         )
-      ],
-    );
-  }
-}
-
-class HeaderSurat extends StatefulWidget {
-  const HeaderSurat({
-    super.key,
-    required this.detailSurat,
-  });
-
-  final DetailSurat detailSurat;
-
-  @override
-  State<HeaderSurat> createState() => _HeaderSuratState();
-}
-
-class _HeaderSuratState extends State<HeaderSurat> {
-  final audioPlayer = AudioPlayer();
-  bool isPlaying = false;
-
-  @override
-  void initState() {
-    super.initState();
-    audioPlayer.onPlayerComplete.listen((_) {
-      setState(() {
-        isPlaying = false;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    audioPlayer.dispose();
-    isPlaying = false;
-    super.dispose();
-  }
-
-  void _playPause(String currentFile) async {
-    if (isPlaying) {
-      await audioPlayer.pause();
-    } else {
-      await audioPlayer.play(UrlSource(currentFile));
-    }
-
-    setState(() {
-      isPlaying = !isPlaying;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          widget.detailSurat.nama,
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: Colors.purple,
-              ),
-        ),
-        Text(
-          widget.detailSurat.namaLatin,
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: Colors.purple,
-              ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        GestureDetector(
-          onTap: () async {
-            _playPause(widget.detailSurat.audioFull.audio01 ?? '');
-          },
-          child: Container(
-            width: 37,
-            height: 37,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color.fromRGBO(221, 40, 81, 0.18),
-            ),
-            child: Center(
-              child: Icon(
-                !isPlaying ? Icons.play_arrow : Icons.pause_circle,
-                color: Colors.purple,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Text(widget.detailSurat.arti),
-        Text('Jumlah ayat : ${widget.detailSurat.jumlahAyat.toString()}'),
-        const SizedBox(
-          height: 10,
-        ),
-        HtmlWidget(widget.detailSurat.deskripsi),
       ],
     );
   }
